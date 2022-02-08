@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-#from tensorflowTesting import testing
-##import tensorflow as tf
 from keras.models import load_model
 import cv2
 import numpy as np
@@ -36,7 +34,6 @@ def model2():
     image1.save(filename)
     img=cv2.imread('image.png',0)
     img=cv2.bitwise_not(img)
-    ##cv2.imshow('img',img)
     img=cv2.resize(img,(28,28))
     binary_img = freeman.convert_binary(img)
     print(binary_img)
@@ -51,17 +48,8 @@ def model():
     image1.save(filename)   
     img=cv2.imread('image.png',0)
     img=cv2.bitwise_not(img)
-    ##cv2.imshow('img',img)
     img=cv2.resize(img,(28,28))
-    #binary_img = freeman.convert_binary(img)
-    #print(binary_img)
-    #binary_img = binary_img.reshape(1, 28, 28)
     img = img.reshape(1, 28, 28)
-    #preds = model.predict(binary_img)
-    #preds = np.argmax(preds, axis=1)
-    #print(preds)
-    #txt.insert(tk.INSERT,"{}\n".format(preds[0]))
-
     preds = model.predict(img)
     preds = np.argmax(preds, axis=1)
     print(preds)
@@ -73,14 +61,11 @@ def clear():
     txt.delete('1.0', END)
 
 root = Tk()
-##root.geometry('1000x500') 
 
 root.resizable(0,0)
 cv = Canvas(root, width=width, height=height, bg='white')
 cv.pack()
 
-# PIL create an empty image and draw object to draw on
-# memory only, not visible
 image1 = PIL.Image.new("RGB", (width, height), white)
 draw = ImageDraw.Draw(image1)
 
@@ -90,10 +75,8 @@ txt=tk.Text(root,bd=3,exportselection=0,bg='WHITE',font='Helvetica',
 cv.pack(expand=YES, fill=BOTH)
 cv.bind("<B1-Motion>", paint)
 
-##button=Button(text="save",command=save)
 btnModel=Button(text="Predict",command=model)
 btnClear=Button(text="clear",command=clear)
-##button.pack()
 btnModel.pack()
 btnClear.pack()
 txt.pack()

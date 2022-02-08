@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-#from tensorflowTesting import testing
-##import tensorflow as tf
 import cv2
 import numpy as np
 from PIL import ImageTk, Image, ImageDraw
@@ -16,7 +14,6 @@ center = height//2
 white = (255, 255, 255)
 green = (0,128,0)
 
-# On instancie un modèle Bayes et on l'entraine sur le data mnist pour précalculés les différentes probabilités
 bayes = naivebayes.Bayes()
 bayes.train()  
 
@@ -33,7 +30,6 @@ def model():
     image1.save(filename)
     img=cv2.imread('image.png',0)
     img=cv2.bitwise_not(img)
-    ##cv2.imshow('img',img)
     img=cv2.resize(img,(28,28))
     img = img.reshape(1, 784)
     preds = bayes.predict(img, np.array([0]))
@@ -46,14 +42,10 @@ def clear():
     txt.delete('1.0', END)
 
 root = Tk()
-##root.geometry('1000x500') 
-
 root.resizable(0,0)
 cv = Canvas(root, width=width, height=height, bg='white')
 cv.pack()
 
-# PIL create an empty image and draw object to draw on
-# memory only, not visible
 image1 = PIL.Image.new("RGB", (width, height), white)
 draw = ImageDraw.Draw(image1)
 
@@ -63,10 +55,8 @@ txt=tk.Text(root,bd=3,exportselection=0,bg='WHITE',font='Helvetica',
 cv.pack(expand=YES, fill=BOTH)
 cv.bind("<B1-Motion>", paint)
 
-##button=Button(text="save",command=save)
 btnModel=Button(text="Predict",command=model)
 btnClear=Button(text="clear",command=clear)
-##button.pack()
 btnModel.pack()
 btnClear.pack()
 txt.pack()
