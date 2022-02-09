@@ -24,17 +24,15 @@ def paint(event):
     draw.line([x1, y1, x2, y2],fill="black",width=40)
 
 def model():
-    k_nn = knn.Knn(10)
+    k_nn = knn.Knn(6)
     filename = "image.png"
     image1.save(filename)
     img=cv2.imread('image.png',0)
     img=cv2.bitwise_not(img)
     img=cv2.resize(img,(28,28))
-    binary_img = freeman.convert_binary(img)
-    print(binary_img)
-    binary_img = binary_img.reshape(1, 784)
-    preds = k_nn.mnist_euclidian_dist(binary_img)
-    txt.insert(tk.INSERT,"{}\n".format(preds))
+    img = img.reshape(1, 28, 28)
+    pred = k_nn.predict_freeman_edit_distance2(4000, img)
+    txt.insert(tk.INSERT,"{}\n".format(pred))
 
 
 def clear():

@@ -2,6 +2,7 @@
 #!/usr/bin/env python3
 
 from keras.datasets import mnist
+from matplotlib.pyplot import axis
 import numpy as np
 
 directions = [ 0,  1,  2,
@@ -32,7 +33,6 @@ def convert_binary(imgs):
 
 def freeman_chain_code(img):
 
-    print(img)
     #On cherche le premier pixel plein de départ
     for i, row in enumerate(img):
         for j, value in enumerate(row):
@@ -76,17 +76,50 @@ def freeman_chain_code(img):
         if count == 1000: break
         count += 1
     print(count)
-    print(chain)  
     return chain  
 
-        
+
+#convert a whole dataset with freeman representation
+def freeman_representation(x_train):
+    freemans = []
+    # on récupère les indexs des images dont on ne peut pas calculer la représentation de freeman car dessin sur les bords
+    to_delete_indexes = []
+    #On convertit en image binaire tout le dataset
+    binary_x_train = convert_binary(x_train)
+
+    for index, img in enumerate(binary_x_train):
+        try:
+            freeman = freeman_chain_code(img)
+            freemans.append(freeman)
+        except Exception as e:
+            print(e)
+            to_delete_indexes.append(index)
+            print(img)
+
+    return freemans, to_delete_indexes
+
+
+
 def main():
+    freemans = []
+
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
     binary_x_train = convert_binary(x_train)
-    freeman_chain_code(binary_x_train[0])
+    binary_x_train = binary_x_train[0:200, :,:]
+    y_train = y_train[0:200]
+    freemans, to_delete_indexes = freeman_representation(binary_x_train)
+    print(freemans)
+    print(to_delete_indexes)
+    print(y_train.shape)
+    for index in to_delete_indexes:
+        y_train = np.delete(y_train, (index), axis=0 )
+    print(len(freemans))
+    print(y_train.shape)
+   
 
 
-
+        
+    
 if __name__ == "__main__":  
     main()
 

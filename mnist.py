@@ -53,7 +53,7 @@ def k_nearest_neighbor_levenstein():
     k_nn = knn.Knn(3)
     #k_nn.predict_levenshtein_dist(x_train_freeman, y_train, x_test_freeman, y_test_binary_small )
     
-
+    
 
 if __name__ == "__main__":  
     #k_nearest_neighbor_binary()

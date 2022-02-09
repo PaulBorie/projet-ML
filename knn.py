@@ -119,7 +119,108 @@ class Knn:
         print("accuracy {}".format(accuracy))
         return preds, accuracy   
         
+    def predict_freeman_edit_distance(self, nb_imgs, nb_test_data):
         
+        preds = []
+        freemans = []
+
+        (x_train, y_train), (x_test, y_test) = mnist.load_data()
+
+        x_train = x_train[0:nb_imgs, : , :]
+        y_train = y_train[0:nb_imgs]
+
+        x_test = x_test[0:nb_test_data, :, :]
+        y_test = y_test[0:nb_test_data]
+
+        freemans, to_delete_indexes = freeman.freeman_representation(x_train)
+        for index in to_delete_indexes:
+            y_train = np.delete(y_train, (index), axis=0 )
+
+        x_test_freemans, to_delete_indexes_x_test = freeman.freeman_representation(x_test)
+        for index in to_delete_indexes_x_test:
+            y_test = np.delete(y_test, (index), axis=0 )
+        
+        print(len(x_test_freemans))
+        print(y_test.shape)
+
+        for row in x_test_freemans:
+            dists = []
+            for freeman_img in freemans:
+                dist = self.levenshtein_distance(freeman_img, row)
+                dists.append(dist)
+            print(dists)
+
+            dists = np.array(dists)
+            dists = dists.reshape((dists.shape[0], 1))
+            print("dists shape: {}".format(dists.shape))
+            y_train = y_train.reshape((y_train.shape[0], 1))
+            print("y_train.shape: {}".format(y_train.shape))
+            dists_with_classes = np.append(y_train, dists, axis=1)
+            print(dists_with_classes.shape)
+
+            sorted_dists = dists_with_classes[dists_with_classes[:, 1].argsort()]
+            print(sorted_dists)
+            print(sorted_dists)
+            k_nearest_neighboors = sorted_dists[:self.k, :]
+            print(k_nearest_neighboors)
+            knn_classes = k_nearest_neighboors[:,0].astype(int)
+            pred = np.bincount(knn_classes).argmax()
+            preds.append(pred)
+        print("preds : {}".format(np.array(preds)))
+        # On compte le nombre de bonne prédictions
+        good_pred_count = np.count_nonzero(preds == y_test)
+        accuracy = good_pred_count / nb_test_data 
+        print("accuracy {}".format(accuracy))
+        return preds, accuracy   
+
+    def predict_freeman_edit_distance2(self, nb_imgs, img_to_predict):
+        
+        preds = []
+        freemans = []
+
+        (x_train, y_train), (x_test, y_test) = mnist.load_data()
+        
+        x_train = x_train[0:nb_imgs, : , :]
+        y_train = y_train[0:nb_imgs]
+
+        
+
+        freemans, to_delete_indexes = freeman.freeman_representation(x_train)
+        for index in to_delete_indexes:
+            y_train = np.delete(y_train, (index), axis=0 )
+
+        x_test_freemans, to_delete_indexes_x_test = freeman.freeman_representation(img_to_predict)
+        
+        
+
+        for row in x_test_freemans:
+            dists = []
+            for freeman_img in freemans:
+                dist = self.levenshtein_distance(freeman_img, row)
+                dists.append(dist)
+            print(dists)
+
+            dists = np.array(dists)
+            dists = dists.reshape((dists.shape[0], 1))
+            print("dists shape: {}".format(dists.shape))
+            y_train = y_train.reshape((y_train.shape[0], 1))
+            print("y_train.shape: {}".format(y_train.shape))
+            dists_with_classes = np.append(y_train, dists, axis=1)
+            print(dists_with_classes.shape)
+
+            sorted_dists = dists_with_classes[dists_with_classes[:, 1].argsort()]
+            print(sorted_dists)
+            print(sorted_dists)
+            k_nearest_neighboors = sorted_dists[:self.k, :]
+            print(k_nearest_neighboors)
+            knn_classes = k_nearest_neighboors[:,0].astype(int)
+            pred = np.bincount(knn_classes).argmax()
+            preds.append(pred)
+        print("preds : {}".format(np.array(preds)))
+        # On compte le nombre de bonne prédictions        
+        return preds[0]   
+
+
 def main():
     knn = Knn(1)
 
@@ -146,5 +247,13 @@ def main2():
     print(test_y)
     knn.predict_levenshtein_dist(train_x, train_y, test_x, test_y)
 
+
+def main3():
+    knn = Knn(3)
+    knn.predict_freeman_edit_distance(4000, 4)
+
+
+
+
 if __name__ == "__main__":  
-    main2()
+    main3()
