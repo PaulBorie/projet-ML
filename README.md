@@ -82,11 +82,12 @@ Contrairement aux tests précédents, nous obtenons une bien meilleure accuracy 
 
 Fichier `notebook_knn.ipynb`.
 
-## Neural Network
+## 3) Neural Network
 
 Fichier: `nn.py`
 
 Nous avons essayé plusieurs modèles avant d'arriver à celui dans `nn.py`.
+
 ### Les différentes architectures testées
 
 
