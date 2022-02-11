@@ -117,7 +117,7 @@ class Bayes:
                 # https://stats.stackexchange.com/questions/163088/how-to-use-log-probabilities-for-gaussian-naive-bayes
                 # log(P(class i| data))∝log(P(classi))+∑jlog(P(dataj|classi))
                 proba_class=np.sum(np.log(probas_each_feature))  # On applique le logarithme car les valeurs sont trop petites
-                proba_class = proba_class +  np.log(self.probas_classes[class_index])
+                proba_class = proba_class + np.log(self.probas_classes[class_index])
                 all_class_prob.append(proba_class) 
                 #print("\n")
             # On a fini de calculer la probabilité pour chaque classe    
@@ -137,9 +137,9 @@ class Bayes:
 
         
 def main():  
-    bayes = Bayes()
+    bayes = Bayes(2)
     train_x = np.array([[4, 1, 2], [5, 3, 1], [8, 8, 2], [9, 9, 1], [2, 3, 4]])
-    train_y = np.array([3, 3, 1, 1, 4])
+    train_y = np.array([3, 3, 2, 1, 4])
 
     test_x = np.array([[2, 3, 4]])
     test_y = np.array([4])
